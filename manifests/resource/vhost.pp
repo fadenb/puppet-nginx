@@ -178,6 +178,12 @@ define nginx::resource::vhost (
     warning('nginx: IPv6 support is not enabled or configured properly')
   }
 
+  # IPv6 + SSL should default to ipv6_listen_port 443
+  if ($ipv6_enable == true) and ($ssl == true) and ($ipv6_listen_port == '80') {
+    $ipv6_listen_port_real = '443'
+  }
+
+
   # Check to see if SSL Certificates are properly defined.
   if ($ssl == true) {
     if ($ssl_cert == undef) or ($ssl_key == undef) {
